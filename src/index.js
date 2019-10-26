@@ -19,7 +19,7 @@ const httpLink = new HttpLink({
   headers: {
     authorization: `Bearer ${
       process.env.REACT_APP_GITHUB_PERSONAL_ACCESS_TOKEN
-    }`,
+      }`,
   },
 });
 
