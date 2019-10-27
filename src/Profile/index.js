@@ -11,11 +11,16 @@ const GET_REPOSITORIES_OF_CURRENT_USER = gql`
       repositories(
         first: 5
         orderBy: { direction: DESC, field: STARGAZERS }
+        after: $cursor
       ) {
         edges {
           node {
             ...repository
           }
+        }
+        pageInfo {
+          endCursor
+          hasNextPage
         }
       }
     }
@@ -23,7 +28,7 @@ const GET_REPOSITORIES_OF_CURRENT_USER = gql`
   ${REPOSITORY_FRAGMENT}
 `;
 
-const Profile = ({ data, loading, error }) => {
+const Profile = ({ data, loading, error, fetchMore }) => {
   if (error) {
     return <ErrorMessage error={error} />;
   }
@@ -31,7 +36,13 @@ const Profile = ({ data, loading, error }) => {
   if (loading || !viewer) {
     return <Loading />;
   }
-  return <RepositoryList repositories={viewer.repositories} />;
+  return (
+    <RepositoryList
+      repositories={viewer.repositories}
+      fetchMore={fetchMore}
+    />
+  );
+
 };
 
 export default graphql(GET_REPOSITORIES_OF_CURRENT_USER)(Profile);
