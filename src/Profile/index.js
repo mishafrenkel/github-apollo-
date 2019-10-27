@@ -1,7 +1,6 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
-import RepositoryList from '../Repository';
 import RepositoryList, { REPOSITORY_FRAGMENT } from '../Repository';
 import Loading from '../Loading';
 import ErrorMessage from '../Error';
