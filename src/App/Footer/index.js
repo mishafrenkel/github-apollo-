@@ -11,9 +11,9 @@ const Footer = () => (
         <span className="Footer-text">Built by</span>{' '}
         <Link
           className="Footer-link"
-          href="https://www.robinwieruch.de"
+          href="https://mikefrenkel.com/"
         >
-          Robin Wieruch
+          Michael Frenkel
         </Link>{' '}
         <span className="Footer-text">with &hearts;</span>
       </small>
@@ -25,15 +25,13 @@ const Footer = () => (
         </span>{' '}
         <Link
           className="Footer-link"
-          href="https://www.getrevue.co/profile/rwieruch"
+          href="https://reactjs.org/"
         >
           Get updates
         </Link>{' '}
         <span className="Footer-text">
-          about upcoming articles, books &
         </span>{' '}
-        <Link className="Footer-link" href="https://roadtoreact.com">
-          courses
+        <Link className="Footer-link" href="https://mikefrenkel.com/">
         </Link>
         <span className="Footer-text">.</span>
       </small>
