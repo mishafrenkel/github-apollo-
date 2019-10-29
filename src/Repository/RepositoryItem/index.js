@@ -118,102 +118,122 @@ const RepositoryItem = ({
   viewerSubscription,
   viewerHasStarred,
 }) => (
-    <div>
-      <div className="RepositoryItem-title">
-        <h2>
-          <Link href={url}>{name}</Link>
-        </h2>
+  <div>
+    <div className="RepositoryItem-title">
+      <h2>
+        <Link href={url}>{name}</Link>
+      </h2>
 
-        <div>
+      <div>
+        <Mutation
+          mutation={WATCH_REPOSITORY}
+          variables={{
+            id,
+            viewerSubscription: isWatch(viewerSubscription)
+              ? VIEWER_SUBSCRIPTIONS.UNSUBSCRIBED
+              : VIEWER_SUBSCRIPTIONS.SUBSCRIBED,
+          }}
+          optimisticResponse={{
+            updateSubscription: {
+              __typename: 'Mutation',
+              subscribable: {
+                __typename: 'Repository',
+                id,
+                viewerSubscription: isWatch(viewerSubscription)
+                  ? VIEWER_SUBSCRIPTIONS.UNSUBSCRIBED
+                  : VIEWER_SUBSCRIPTIONS.SUBSCRIBED,
+              },
+            },
+          }}
+          update={updateWatch}
+        >
+          {(updateSubscription, { data, loading, error }) => (
+            <Button
+              className="RepositoryItem-title-action"
+              data-test-id="updateSubscription"
+              onClick={updateSubscription}
+            >
+              {watchers.totalCount}{' '}
+              {isWatch(viewerSubscription) ? 'Unwatch' : 'Watch'}
+            </Button>
+          )}
+        </Mutation>
+
+        {!viewerHasStarred ? (
           <Mutation
-            mutation={WATCH_REPOSITORY}
-            variables={{
-              id,
-              viewerSubscription: isWatch(viewerSubscription)
-                ? VIEWER_SUBSCRIPTIONS.UNSUBSCRIBED
-                : VIEWER_SUBSCRIPTIONS.SUBSCRIBED,
-            }}
+            mutation={STAR_REPOSITORY}
+            variables={{ id }}
             optimisticResponse={{
-              updateSubscription: {
+              addStar: {
                 __typename: 'Mutation',
-                subscribable: {
+                starrable: {
                   __typename: 'Repository',
                   id,
-                  viewerSubscription: isWatch(viewerSubscription)
-                    ? VIEWER_SUBSCRIPTIONS.UNSUBSCRIBED
-                    : VIEWER_SUBSCRIPTIONS.SUBSCRIBED
+                  viewerHasStarred: !viewerHasStarred,
                 },
               },
             }}
-            update={updateWatch}
+            update={updateAddStar}
           >
-            {(updateSubscription, { data, loading, error }) => (
+            {(addStar, { data, loading, error }) => (
               <Button
-                className="RepositoryItem-title-action"
-                data-test-id="updateSubscription"
-                onClick={updateSubscription}
+                className={'RepositoryItem-title-action'}
+                onClick={addStar}
               >
-                {watchers.totalCount}{' '}
-                {isWatch(viewerSubscription) ? 'Unwatch' : 'Watch'}
+                {stargazers.totalCount} Star
               </Button>
             )}
           </Mutation>
-
-          {!viewerHasStarred ? (
-            <Mutation
-              mutation={STAR_REPOSITORY}
-              variables={{ id }}
-              update={updateAddStar}
-            >
-              {(addStar, { data, loading, error }) => (
-                <Button
-                  className={'RepositoryItem-title-action'}
-                  onClick={addStar}
-                >
-                  {stargazers.totalCount} Star
-              </Button>
-              )}
-            </Mutation>
-          ) : (
-              <Mutation
-                mutation={UNSTAR_REPOSITORY}
-                variables={{ id }}
-                update={updateRemoveStar}
+        ) : (
+          <Mutation
+            mutation={UNSTAR_REPOSITORY}
+            variables={{ id }}
+            optimisticResponse={{
+              removeStar: {
+                __typename: 'Mutation',
+                starrable: {
+                  __typename: 'Repository',
+                  id,
+                  viewerHasStarred: !viewerHasStarred,
+                },
+              },
+            }}
+            update={updateRemoveStar}
+          >
+            {(removeStar, { data, loading, error }) => (
+              <Button
+                className="RepositoryItem-title-action"
+                onClick={removeStar}
               >
-                {(removeStar, { data, loading, error }) => (
-                  <Button
-                    className="RepositoryItem-title-action"
-                    onClick={removeStar}
-                  >
-                    {stargazers.totalCount} Unstar
+                {stargazers.totalCount} Unstar
               </Button>
-                )}
-              </Mutation>
             )}
-        </div>
+          </Mutation>
+        )}
       </div>
+    </div>
 
-      <div className="RepositoryItem-description">
-        <div
-          className="RepositoryItem-description-info"
-          dangerouslySetInnerHTML={{ __html: descriptionHTML }}
-        />
-        <div className="RepositoryItem-description-details">
-          <div>
-            {primaryLanguage && (
-              <span>Language: {primaryLanguage.name}</span>
-            )}
-          </div>
-          <div>
-            {owner && (
-              <span>
-                Owner: <a href={owner.url}>{owner.login}</a>
-              </span>
-            )}
-          </div>
+    <div className="RepositoryItem-description">
+      <div
+        className="RepositoryItem-description-info"
+        dangerouslySetInnerHTML={{ __html: descriptionHTML }}
+      />
+      <div className="RepositoryItem-description-details">
+        <div>
+          {primaryLanguage && (
+            <span>Language: {primaryLanguage.name}</span>
+          )}
+        </div>
+        <div>
+          {owner && (
+            <span>
+              Owner: <a href={owner.url}>{owner.login}</a>
+            </span>
+          )}
         </div>
       </div>
     </div>
-  );
+  </div>
+);
 
 export default RepositoryItem;
