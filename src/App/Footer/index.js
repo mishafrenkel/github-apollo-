@@ -25,15 +25,17 @@ const Footer = () => (
         </span>{' '}
         <Link
           className="Footer-link"
-          href="https://reactjs.org/"
+          href="www.reactjs.org"
         >
           Get updates
         </Link>{' '}
         <span className="Footer-text">
+          about upcoming articles, books &
         </span>{' '}
-        <Link className="Footer-link" href="https://mikefrenkel.com/">
+        <Link className="Footer-link" href="https://twitter.com/mikebeingfrank">
+          courses or just say hi!
         </Link>
-        <span className="Footer-text">.</span>
+        <span classNam e="Footer-text">.</span>
       </small>
     </div>
   </div>
