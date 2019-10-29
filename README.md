@@ -35,8 +35,3 @@
   * [Prettier for EMACS](https://github.com/prettier/prettier-emacs)
   * [Prettier for VIM](https://prettier.io/docs/en/vim.html)
   * [others...](https://prettier.io/docs/en/editors.html)
-
-## Want to learn more about React + GraphQL + Apollo?
-
-* Don't miss [upcoming Tutorials and Courses](https://www.getrevue.co/profile/rwieruch)
-* Check out current [React Courses](https://roadtoreact.com)
